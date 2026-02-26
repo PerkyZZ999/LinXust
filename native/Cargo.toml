@@ -1,0 +1,20 @@
+[package]
+name = "native"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0.95"
+aes-gcm = "0.10.3"
+argon2 = "0.5.3"
+memmap2 = "0.9.5"
+napi = { version = "3.0.0", features = ["napi8"] }
+napi-derive = "3.0.0"
+rayon = "1.10.0"
+tokio = { version = "1.43.0", features = ["rt-multi-thread", "macros", "fs", "io-util"] }
+
+[build-dependencies]
+napi-build = "2.1.4"
