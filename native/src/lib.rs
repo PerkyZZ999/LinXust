@@ -131,13 +131,11 @@ fn lz77_encode(data: &[u8]) -> Vec<Lz77Token> {
     for j in window_start..i {
       let mut length = 0_usize;
       while i + length < data.len()
+        && j + length < i
         && data[j + length] == data[i + length]
         && length < LZ77_MAX_MATCH
       {
         length += 1;
-        if j + length >= i {
-          break;
-        }
       }
       if length > best_len {
         best_len = length;
@@ -266,8 +264,8 @@ fn build_codes(
 ) {
   match nodes[index] {
     HuffmanNode::Leaf { symbol, .. } => {
-      let effective_length = if bit_length == 0 { 1 } else { bit_length };
-      codes[symbol as usize] = Some((code, effective_length));
+      let code_length = if bit_length == 0 { 1 } else { bit_length };
+      codes[symbol as usize] = Some((code, code_length));
     }
     HuffmanNode::Internal { left, right, .. } => {
       build_codes(nodes, left, code << 1, bit_length + 1, codes);
