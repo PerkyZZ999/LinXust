@@ -1,0 +1,20 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app {
+  color: #e2e8f0;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.card {
+  margin-top: 1rem;
+  background: #111827;
+  border-radius: 10px;
+  padding: 1rem;
+}
