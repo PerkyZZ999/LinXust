@@ -1,3 +1,6 @@
+mod lxt;
+mod lxt_streaming;
+
 use napi_derive::napi;
 use std::cmp::{Ordering, Reverse};
 use std::collections::BinaryHeap;

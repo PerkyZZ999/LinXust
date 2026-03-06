@@ -1,5 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron')
+const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld('linxustApi', {
-  helloFromRust: (name) => ipcRenderer.invoke('linxust:hello', name),
-})
+contextBridge.exposeInMainWorld("linxustApi", {
+	getBridgeStatus: () => ipcRenderer.invoke("linxust:bridge-status"),
+	helloFromRust: (name) => ipcRenderer.invoke("linxust:hello", name),
+});

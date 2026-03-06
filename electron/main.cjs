@@ -1,37 +1,48 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require('path')
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
 
-let native
-try {
-  native = require(path.join(__dirname, '..', 'native', 'index.js'))
-} catch {
-  native = { helloFromRust: (name) => `Hello, ${name}, from Rust (native module not built yet)!` }
-}
+const { loadNativeBridge } = require("./native-bridge.cjs");
+
+const frontendEntry = path.join(
+	__dirname,
+	"..",
+	"frontend",
+	"dist",
+	"index.html",
+);
+
+const { binding: native, bindingInfo } = loadNativeBridge();
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 1100,
-    height: 720,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.cjs'),
-      contextIsolation: true,
-      nodeIntegration: false,
-    },
-  })
+	const win = new BrowserWindow({
+		width: 1100,
+		height: 720,
+		webPreferences: {
+			preload: path.join(__dirname, "preload.cjs"),
+			contextIsolation: true,
+			nodeIntegration: false,
+		},
+	});
 
-  const devUrl = process.env.LINXUST_DEV_URL || 'http://localhost:5173'
-  win.loadURL(devUrl)
+	const devUrl = process.env.LINXUST_DEV_URL;
+	if (devUrl) {
+		win.loadURL(devUrl);
+		return;
+	}
+
+	win.loadFile(frontendEntry);
 }
 
-ipcMain.handle('linxust:hello', (_event, name) => native.helloFromRust(name))
+ipcMain.handle("linxust:hello", (_event, name) => native.helloFromRust(name));
+ipcMain.handle("linxust:bridge-status", () => bindingInfo);
 
 app.whenReady().then(() => {
-  createWindow()
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
+	createWindow();
+	app.on("activate", () => {
+		if (BrowserWindow.getAllWindows().length === 0) createWindow();
+	});
+});
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
+app.on("window-all-closed", () => {
+	if (process.platform !== "darwin") app.quit();
+});

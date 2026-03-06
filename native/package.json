@@ -1,11 +1,11 @@
 {
-  "name": "linxust-native",
-  "private": true,
-  "version": "0.1.0",
-  "scripts": {
-    "build": "napi build --platform --release"
-  },
-  "devDependencies": {
-    "@napi-rs/cli": "3.0.0"
-  }
+	"name": "linxust-native",
+	"private": true,
+	"version": "0.1.0",
+	"scripts": {
+		"build": "bunx @napi-rs/cli build --platform --release"
+	},
+	"devDependencies": {
+		"@napi-rs/cli": "3.5.1"
+	}
 }
